@@ -41,7 +41,7 @@ public class FileController {
             file.transferTo(new File(UPLOAD_DIR + newFileName));
 
             // 返回可访问的 URL (对应下面的 view 接口)
-            String fileUrl = "http://localhost:8081/api/file/view/" + newFileName;
+            String fileUrl = "/time_capsule/images/" + newFileName;
             return Result.success("上传成功", fileUrl);
         } catch (IOException e) {
             return Result.error("上传失败：" + e.getMessage());

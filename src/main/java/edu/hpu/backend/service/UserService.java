@@ -50,15 +50,29 @@ public class UserService {
     }
 
     // 更新用户信息
+    // 更新用户信息
     public boolean updateUserInfo(UserUpdateDTO dto) {
         User user = userMapper.selectById(dto.getId());
         if (user == null) return false;
 
-        if (dto.getNickname() != null && !dto.getNickname().isEmpty()) user.setNickname(dto.getNickname());
-        if (dto.getBio() != null) user.setBio(dto.getBio());
-        if (dto.getAvatar() != null) user.setAvatar(dto.getAvatar());
+        // 1. 更新昵称
+        if (dto.getNickname() != null && !dto.getNickname().isEmpty()) {
+            user.setNickname(dto.getNickname());
+        }
 
-        return userMapper.updateById(user) > 0;
+        // 2. 更新签名 (允许为空字符串，即清空签名)
+        if (dto.getBio() != null) {
+            user.setBio(dto.getBio());
+        }
+
+        // 3. 更新头像 (如果前端传了新路径)
+        if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
+            user.setAvatar(dto.getAvatar());
+        }
+
+        // 4. 执行 SQL 更新
+        int rows = userMapper.updateById(user);
+        return rows > 0;
     }
 
     // 【新增】公开查询 ID 的方法（解决 Controller 报错的问题）
